@@ -1,0 +1,210 @@
+<div class="company-grid">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-6 col-md-12 responsive box company-info">
+            <h1>Company</h1>
+            <h1>Information</h1>
+            <span>
+                <i class="glyphicon glyphicon-briefcase"></i>
+            </span>
+        </div>
+        <div class="col-lg-6 col-md-12 box">
+            <div class="grid-spacer col-md-12">
+                @if(User.IsInRole("Sales Coach"))
+                {
+                <span class="company-ind">@Html.HiddenFor(x => x.LastOrDefault().ComId, new { @class = "help" })</span>
+                <h3 class="segment-header">@Html.DisplayFor(x => x.LastOrDefault().CompanyName)</h3>
+                <h4>Account Number:</h4>
+                <h4>@Html.DisplayFor(x => x.LastOrDefault().AccountNumber)</h4>
+                <h4>Company Owner:</h4>
+                <h4>@Html.DisplayFor(x => x.LastOrDefault().CreatedBy)</h4>
+                }
+                @if(User.IsInRole("Company"))
+                {
+                    <span class="company-ind">@Html.HiddenFor(x => x.LastOrDefault().ComId, new { @class = "help" })</span>
+                    <h3 class="segment-header">@department.DepName</h3>
+                    <h4>Sales Coach Company:</h4>
+                    <h4>@department.CompanyDTO.CompanyName</h4>
+                }
+                @if (User.IsInRole("Administrator"))
+                {
+                    @Html.DropDownList("Companies", new SelectList(ViewBag.CompanyList, "Value", "Text"), htmlAttributes: new {onchange = "assignCompany()", @class = "form-control department-list", @id = "companylist"})
+                }
+            </div>
+        </div>
+        <div class="row company-table departments" style="display: none">
+            <div class="col-lg-8 col-md-12">
+                <h3 class="segment-header">Activities</h3>
+                @if(User.IsInRole("Company"))
+                {
+                    <a class="btn view-activity btn-default goal-assistance col-lg-6">
+                        <div class="">
+                            <span>
+                                <i class="glyphicon glyphicon-list"></i>
+                            </span>
+                            View
+                        </div>
+                    </a>
+                    <a class="btn edit-activity btn-default goal-assistance col-lg-6" id="@department.DepId">
+                        <div class="">
+                            <span>
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </span>
+                            Edit
+                        </div>
+                    </a>
+                }
+                          
+                <div class="form box">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 box">
+                @if(User.IsInRole("Company"))
+                {
+                    <a class="btn get-user btn-default goal-assistance col-lg-12" onclick="getDepartmentRowInfo()" id=@department.DepId>
+                        <div class="" >
+                            <span>
+                                <i class="glyphicon glyphicon-user"></i>
+                            </span>
+                            View Users
+                        </div>
+                    </a>                  
+                }
+                @if(User.IsInRole("Administrator")|| User.IsInRole("Sales Coach"))
+                {
+                    <div class="dep create" style="display:none">
+                        <h3 class="segment-header">Add Company</h3>
+                        <div class="create-form box"></div>
+                    </div>
+                    <div class="dep edit" style="display: none">
+                        <h3 class="segment-header">Edit Company Name</h3>
+                        <div class="form edit-form box"></div>
+                    </div>
+                }
+                
+                @if(User.IsInRole("Company"))
+                {
+                    <div class="guideline-container">
+                <div class="guideline">
+                    <span>
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                    </span>
+                    To edit your company name, type in the first text-box in the edit activity section.
+                </div>
+                <div class="guideline">
+                    <span>
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                    </span>
+                    When editing an activity name, be sure to type within the same text-box.
+                </div>
+                <div class="guideline">
+                    <span>
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                    </span>
+                    If adding a new activity, be sure to type the activity name within a blank text-box.
+                </div>
+                <div class="guideline">
+                    <span>
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                    </span>
+                    When adding an activity with a monetary value, be sure to type it underneath the Monetary Activity section.
+                </div>
+                        <div class="guideline">
+                            <span>
+                                <i class="glyphicon glyphicon-warning-sign"></i>
+                            </span>
+                            When adding an activity with a numerical value, be sure to type it underneath the Numeric Activity section.
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row company-table user" style="display: none">
+            <div class="col-lg-8 col-md-12">
+                <h3 class="segment-header">Users</h3>
+                <div class="form box">
+
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 box">
+                <div class="create">
+                    <h3 class="segment-header">Add User</h3>
+                    <div class="form box"></div>
+                </div>
+                <div class="edit" style="display: none">
+                    <h3 class="segment-header">Edit User</h3>
+                    <div class="form edit-form box">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*@if (User.IsInRole("Administrator"))
+            {
+                <div class="row company-table company" style="display: none">
+                    <div class="col-lg-8 col-md-12">
+                        <h3 class="segment-header">Companies</h3>
+                        <div class="form">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 box">
+                        <div class="create">
+                            <h3 class="segment-header">Add User</h3>
+                            <div class="form box"></div>
+                        </div>
+                        <div class="edit" style="display: none">
+                            <h3 class="segment-header">Edit User</h3>
+                            <div class="form edit-form box">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }*@
+    </div>
+
+    @*<div class="row">
+            <div class="col-lg-5 col-md-12 box users">
+                <h3 class="segment-header">Users</h3>
+                <a title="Add Goal" class="btn add col goal-assistance col-lg-6">
+                    <div >
+                        <span>
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </span>
+                    </div>
+
+                </a>*
+                <a title="Add Goal" class="btn view col goal-assistance col-lg-12">
+                    <div>
+                        <span>
+                            <i class="glyphicon glyphicon-list"></i>
+                        </span>
+                    </div>
+                    <h4>Manage Users</h4>
+                </a>
+            </div>
+            <div class="modal fade" id="myUserModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 class="modal-title segment-header">Annual Goals</h3>
+                        </div>
+                        <div class="modal-body" id="userModalBody">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default goal-assistance" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+            <div class="col-lg-5 col-md-12 responsive box">
+                <h3 class="segment-header">Departments</h3>
+                <span>
+                    <i class="glyphicon glyphicon-home"></i>
+                </span>
+            </div>
+        </div>*@
+</div>
